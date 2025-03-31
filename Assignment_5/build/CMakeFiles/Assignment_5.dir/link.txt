@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/Assignment_5.dir/main.c.o CMakeFiles/Assignment_5.dir/notes.c.o CMakeFiles/Assignment_5.dir/songplayer.c.o -o Assignment_5 
