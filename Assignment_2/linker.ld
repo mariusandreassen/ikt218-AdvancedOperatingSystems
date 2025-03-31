@@ -6,7 +6,8 @@ SECTIONS
 
     .text :
     {
-        *(.text)
+        *(.multiboot)   /* Multiboot header must be in the first 8KB */
+        *(.text*)
     }
 
     .rodata : { *(.rodata*) }

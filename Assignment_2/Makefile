@@ -1,7 +1,9 @@
 BUILD_DIR = build
+ISO_DIR = iso
 PROJECT_NAME = Assignment_2
 
 $(shell mkdir -p $(BUILD_DIR))
+$(shell mkdir -p $(ISO_DIR)/boot/grub)
 
 all: $(BUILD_DIR)/$(PROJECT_NAME).bin
 
@@ -14,8 +16,13 @@ $(BUILD_DIR)/%.o: kernel/%.c
 $(BUILD_DIR)/gdt_flush.o: kernel/gdt_flush.asm
 	nasm -f elf32 $< -o $@
 
-run: all
-	qemu-system-i386 -fda $(BUILD_DIR)/$(PROJECT_NAME).bin
+iso: all
+	cp $(BUILD_DIR)/$(PROJECT_NAME).bin $(ISO_DIR)/boot/
+	cp boot/grub/grub.cfg $(ISO_DIR)/boot/grub/
+	grub-mkrescue -o $(BUILD_DIR)/$(PROJECT_NAME).iso $(ISO_DIR)
+
+run: iso
+	qemu-system-i386 -cdrom $(BUILD_DIR)/$(PROJECT_NAME).iso -boot d -no-reboot -no-shutdown
 
 clean:
-	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.bin
+	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.bin $(BUILD_DIR)/*.iso
